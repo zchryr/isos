@@ -28,7 +28,7 @@ jobs:
           python3 isos.py
 
   download-ubuntu-isos:
-    name: 'Download Ubuntu ISOs'
+    name: 'Download ${{ matrix.job.codename }}:${{ matrix.job.version }}'
     runs-on: self-hosted
     needs: get-ubuntu-isos
     strategy:
@@ -36,8 +36,11 @@ jobs:
         job: ${{ fromJson(needs.get-ubuntu-isos.outputs.matrix) }}
 
     steps:
-      - name: test
+      - name: Download Ubuntu Server ISO
         run: |
-          echo "${{ matrix.job.codename }}:${{ matrix.job.version }}"
-        # echo ${{ fromJson(matrix.job) }}
-        # echo ${{ toJson(matrix.job) }}
+          echo "Downloading latest: ${{ matrix.job.codename }}:${{ matrix.job.version }}"
+          wget -v ${{ matrix.job.download_url }} -O ubuntu-server-${{ matrix.job.version }}-latest.iso
+
+      - name: Delete ISO
+        run: |
+          rm ubuntu-server-${{ matrix.job.version }}-latest.iso
