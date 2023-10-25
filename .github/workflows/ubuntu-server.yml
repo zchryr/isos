@@ -39,7 +39,13 @@ jobs:
       - name: Download Ubuntu Server ISO
         run: |
           echo "Downloading latest: ${{ matrix.job.codename }}:${{ matrix.job.version }}"
-          wget -v ${{ matrix.job.download_url }} -O ubuntu-server-${{ matrix.job.version }}-latest.iso
+          wget -q ${{ matrix.job.download_url }} -O ubuntu-server-${{ matrix.job.version }}-latest.iso
+
+      - name: Latest Ubuntu Server ISO -> NAS
+        run: |
+          apt update -q
+          apt install sshpass -y
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-server-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-latest.iso
 
       - name: Delete ISO
         run: |
