@@ -25,7 +25,7 @@ jobs:
         working-directory: ./ubuntu
         run: |
           pip3 install -q -r requirements.txt
-          python3 isos.py
+          python3 server.py
 
   download-ubuntu-isos:
     name: 'Download ${{ matrix.job.codename }}:${{ matrix.job.version }}'
