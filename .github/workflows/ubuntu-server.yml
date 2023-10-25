@@ -43,7 +43,7 @@ jobs:
 
       - name: Latest Ubuntu Server ISO -> NAS
         run: |
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-server-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-latest.iso
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-server-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-server-${{ matrix.job.version }}-latest.iso
 
       - name: Delete Local ISO
         run: |
