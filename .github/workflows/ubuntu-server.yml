@@ -51,12 +51,12 @@ jobs:
 
       - name: echo
         run: |
-          echo ${{ matrix.job }}
+          echo ${{ toJson(matrix.job) }}
 
       - name: Build Notification
         uses: zchryr/build-notifier-action@v1.0.11
         with:
-          body: ${{ matrix.job }}
+          body: ${{ toJson(matrix.job) }}
           url: ${{ secrets.WEBHOOK }}
           response_code: 201
           repo: ${{ github.repository }}
