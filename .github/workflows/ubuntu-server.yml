@@ -1,0 +1,43 @@
+name: 'Ubuntu Server ISOs'
+on:
+  push:
+  workflow_dispatch: # Manual trigger.
+
+jobs:
+  get-ubuntu-isos:
+    name: 'Generate Matrix Ubuntu ISOs'
+    runs-on: ubuntu-latest
+    container:
+      image: python:latest
+    outputs:
+      matrix: ${{ steps.iso.outputs.matrix }}
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v4
+
+      - name: Upgrade Pip
+        run: |
+          pip3 install --upgrade pip
+
+      - name: Generate Matrix
+        id: iso
+        working-directory: ./ubuntu-server/iso
+        run: |
+          pip3 install -q -r requirements.txt --root-user-action=ignore
+          python3 iso.py
+
+  download-ubuntu-isos:
+    name: 'Download Ubuntu ISOs'
+    runs-on: self-hosted
+    needs: get-ubuntu-isos
+    strategy:
+      matrix:
+        job: ${{ fromJson(needs.get-ubuntu-isos.outputs.matrix) }}
+
+    steps:
+      - name: test
+        run: |
+          echo ${{ matrix.job }}
+          echo ${{ fromJson(matrix.job) }}
+          echo ${{ toJson(matrix.job) }}
