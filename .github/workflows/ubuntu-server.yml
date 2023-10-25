@@ -49,10 +49,6 @@ jobs:
         run: |
           rm ubuntu-server-${{ matrix.job.version }}-latest.iso
 
-      - name: echo
-        run: |
-          echo ${{ toJson(matrix.job) }}
-
       - name: Build Notification
         uses: zchryr/build-notifier-action@v1.0.11
         with:
