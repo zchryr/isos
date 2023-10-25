@@ -22,9 +22,9 @@ jobs:
 
       - name: Generate Matrix
         id: iso
-        working-directory: ./ubuntu-server/iso
+        working-directory: ./ubuntu
         run: |
-          pip3 install -q -r requirements.txt --root-user-action=ignore
+          pip3 install -q -r requirements.txt
           python3 iso.py
 
   download-ubuntu-isos:
