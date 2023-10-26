@@ -15,11 +15,24 @@ now = datetime.now()  # Get the current time.
 lts_releases = []  # List for LTS releases.
 last_3_lts_releases = []  # List for latest LTS release versions.
 matrix = []  # List for Python matrix for output.
-github_actions = False
+github_actions = False  # If in GitHub Actions context.
+sku = ""  # Type of Ubuntu to download. E.g., live-server || desktop.
 
 # Sets github_actions = True if running in GitHub Actions environment.
 if os.environ.get("GITHUB_ACTION") != None:
     github_actions = True
+
+if os.environ.get("UBUNTU_SKU") == None:
+    print("Missing required environment variable: UBUNTU_SKU")
+    print("Valid options are: ")
+    print("- server")
+    print("- desktop")
+elif os.environ.get("UBUNTU_SKU").lower() == "server":
+    sku = "live-server"
+elif os.environ.get("UBUNTU_SKU").lower() == "desktop":
+    sku = "desktop"
+else:
+    print("¯\_(ツ)_/¯")
 
 # Get Ubuntu releases from Ubuntu API.
 response = requests.get("https://ubuntu.com/security/releases.json")
@@ -40,7 +53,7 @@ last_3_lts_releases.sort(reverse=True)
 last_3_lts_releases = last_3_lts_releases[:3]
 
 # URL for live-server downloads from Ubuntu.
-server_url = "https://releases.ubuntu.com/{}/ubuntu-{}-live-server-amd64.iso"
+server_url = "https://releases.ubuntu.com/{}/ubuntu-{}-{}-amd64.iso"
 
 # Check release URL for valid versions.
 for lts in last_3_lts_releases:
@@ -53,7 +66,7 @@ for lts in last_3_lts_releases:
                 else:
                     version_string = "{}.{}".format(release["version"], minor_version)
 
-                url = server_url.format(release["codename"], version_string)
+                url = server_url.format(release["codename"], version_string, sku)
 
                 print(
                     "Testing: "
@@ -70,6 +83,7 @@ for lts in last_3_lts_releases:
                 if response.status_code == 200:
                     lts = release
                     lts["download_url"] = url
+                    lts["sku"] = sku
                     matrix.append(lts)
                     print(
                         "Found valid version: "
@@ -91,4 +105,4 @@ for lts in last_3_lts_releases:
 if github_actions:
     set_output("matrix", json.dumps(matrix))
 else:
-    print(json.dumps(matrix))
+    print(json.dumps(matrix, indent=4))

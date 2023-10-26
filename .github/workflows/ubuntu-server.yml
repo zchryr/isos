@@ -11,6 +11,9 @@ jobs:
       image: python:latest
     outputs:
       matrix: ${{ steps.iso.outputs.matrix }}
+    strategy:
+      matrix:
+        sku: ['desktop', 'server']
 
     steps:
       - name: Clone
@@ -26,6 +29,8 @@ jobs:
         run: |
           pip3 install -q -r requirements.txt
           python3 server.py
+        env:
+          UBUNTU_SKU: ${{ matrix.sku }}
 
   download-ubuntu-isos:
     name: 'Download ${{ matrix.job.codename }}:${{ matrix.job.version }}'
@@ -43,7 +48,7 @@ jobs:
 
       - name: Latest Ubuntu Server ISO -> NAS
         run: |
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-server-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-server-${{ matrix.job.version }}-latest.iso
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-server-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
 
       - name: Delete Local ISO
         run: |
