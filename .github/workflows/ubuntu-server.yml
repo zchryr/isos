@@ -40,13 +40,28 @@ jobs:
         job: ${{ fromJson(needs.get-ubuntu-isos.outputs.matrix) }}
 
     steps:
+      - name: Clean Workspace
+        uses: AutoModality/action-clean@v1.1.0
+
       - name: Download Ubuntu Server ISO
         run: |
           echo "Downloading latest: ${{ matrix.job.codename }}:${{ matrix.job.version }}"
-          wget -q ${{ matrix.job.download_url }} -O ubuntu-server-${{ matrix.job.version }}-latest.iso
+          wget -q ${{ matrix.job.download_url }}
+        # wget -q ${{ matrix.job.download_url }} -O ubuntu-server-${{ matrix.job.version }}-latest.iso
+
+      - name: Download Ubuntu Server SHA256SUMS
+        run: |
+          RELEASE=${{ matrix.job.codename }}
+          wget "https://releases.ubuntu.com/$RELEASE/SHA256SUMS"
+
+      - name: Verify SHA of ISO
+        run: |
+          sha256sum -c SHA256SUMS
+        # shasum -c - || exit 1
 
       - name: Latest Ubuntu Server ISO -> NAS
         run: |
+          mv *.iso ubuntu-server-${{ matrix.job.version }}-latest.iso
           sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-server-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
 
       - name: Delete Local ISO
