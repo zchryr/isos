@@ -27,6 +27,7 @@ if os.environ.get("UBUNTU_SKU") == None:
     print("Valid options are: ")
     print("- server")
     print("- desktop")
+    exit(1)
 elif os.environ.get("UBUNTU_SKU").lower() == "server":
     sku = "live-server"
 elif os.environ.get("UBUNTU_SKU").lower() == "desktop":

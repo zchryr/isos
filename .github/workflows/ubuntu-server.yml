@@ -27,7 +27,7 @@ jobs:
         working-directory: ./ubuntu
         run: |
           pip3 install -q -r requirements.txt
-          python3 ubuntu.py
+          python3 metadata.py
         env:
           UBUNTU_SKU: 'server'
 
