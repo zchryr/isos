@@ -27,7 +27,7 @@ jobs:
           pip3 install -q -r requirements.txt
           python3 server.py
         env:
-          UBUNTU_SKU: 'server'
+          UBUNTU_SKU: 'desktop'
 
   download-ubuntu-isos:
     name: 'Download ${{ matrix.job.codename }}:${{ matrix.job.version }} - ${{ matrix.job.sku }}'
