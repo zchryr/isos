@@ -35,6 +35,7 @@ else:
     print("¯\_(ツ)_/¯")
 
 # Get Ubuntu releases from Ubuntu API.
+# https://ubuntu.com/security/api/docs
 response = requests.get("https://ubuntu.com/security/releases.json")
 json_data = response.json()
 
