@@ -33,7 +33,7 @@ elif os.environ.get("UBUNTU_SKU").lower() == "server":
 elif os.environ.get("UBUNTU_SKU").lower() == "desktop":
     sku = "desktop"
 else:
-    print("¯\_(ツ)_/¯")
+    print("¯\\_(ツ)_/¯")
 
 # Get Ubuntu releases from Ubuntu API.
 # https://ubuntu.com/security/api/docs
