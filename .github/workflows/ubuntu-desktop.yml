@@ -27,7 +27,7 @@ jobs:
         working-directory: ./ubuntu
         run: |
           pip3 install -q -r requirements.txt
-          python3 server.py
+          python3 ubuntu.py
         env:
           UBUNTU_SKU: 'desktop'
 
