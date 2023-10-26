@@ -33,7 +33,7 @@ jobs:
           UBUNTU_SKU: ${{ matrix.sku }}
 
   download-ubuntu-isos:
-    name: 'Download ${{ matrix.job.codename }}:${{ matrix.job.version }}'
+    name: 'Download ${{ matrix.job.codename }}:${{ matrix.job.version }} - ${{ matrix.job.sku }}'
     runs-on: self-hosted
     needs: get-ubuntu-isos
     strategy:
