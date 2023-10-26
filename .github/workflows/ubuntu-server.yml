@@ -1,4 +1,4 @@
-name: 'Ubuntu Server ISOs'
+name: 'Ubuntu Server ISOs - server'
 on:
   push:
   workflow_dispatch: # Manual trigger.
