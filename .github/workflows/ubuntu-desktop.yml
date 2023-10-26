@@ -2,6 +2,8 @@ name: 'Ubuntu Server ISOs - desktop'
 on:
   push:
   workflow_dispatch: # Manual trigger.
+  schedule:
+    - cron: '0 0 * * MON' # Every Monday.
 
 jobs:
   get-ubuntu-isos:
