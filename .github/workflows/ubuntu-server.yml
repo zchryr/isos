@@ -1,6 +1,9 @@
-name: 'Ubuntu Server ISOs - server'
+name: 'Ubuntu Server ISOs'
+
 on:
   push:
+    branches:
+      - main
   workflow_dispatch: # Manual trigger.
   schedule:
     - cron: '0 0 * * MON' # Every Monday.

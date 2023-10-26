@@ -1,6 +1,9 @@
-name: 'Ubuntu Server ISOs - desktop'
+name: 'Ubuntu Desktop ISOs'
+
 on:
   push:
+    branches:
+      - main
   workflow_dispatch: # Manual trigger.
   schedule:
     - cron: '0 0 * * MON' # Every Monday.
@@ -43,15 +46,15 @@ jobs:
       - name: Download Ubuntu Server ISO
         run: |
           echo "Downloading latest: ${{ matrix.job.codename }}:${{ matrix.job.version }}"
-          wget -q ${{ matrix.job.download_url }} -O ubuntu-server-${{ matrix.job.version }}-latest.iso
+          wget -q ${{ matrix.job.download_url }} -O ubuntu-desktop-${{ matrix.job.version }}-latest.iso
 
       - name: Latest Ubuntu Server ISO -> NAS
         run: |
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-server-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-desktop-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
 
       - name: Delete Local ISO
         run: |
-          rm ubuntu-server-${{ matrix.job.version }}-latest.iso
+          rm ubuntu-desktop-${{ matrix.job.version }}-latest.iso
 
       - name: Build Notification
         uses: zchryr/build-notifier-action@v1.0.11
