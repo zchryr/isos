@@ -49,7 +49,7 @@ func main() {
 		log.Fatalf("Error: %s", err)
 	}
 	url := formatURL(version)
-	fmt.Println(url)
+	fmt.Println("Latest ISO download URL:", url)
 
 	// If within GitHub Actions context, set the output.
 	githubEnv := os.Getenv("GITHUB_ENV")
