@@ -60,9 +60,8 @@ jobs:
           wget "https://releases.ubuntu.com/${{ matrix.job.codename }}/SHA256SUMS"
 
       - name: Re-write SHA File
-        working-directory: ./ubuntu
         run: |
-          python3 checksum.py -sku ${{ matrix.job.sku }}
+          python3 ./ubuntu/checksum.py -sku ${{ matrix.job.sku }}
 
       - name: Verify SHA of ISO
         run: |
