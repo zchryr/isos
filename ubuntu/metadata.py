@@ -22,17 +22,19 @@ sku = ""  # Type of Ubuntu to download. E.g., live-server || desktop.
 if os.environ.get("GITHUB_ACTION") != None:
     github_actions = True
 
-if os.environ.get("UBUNTU_SKU") == None:
+# if os.environ.get("UBUNTU_SKU") == None:
+if "UBUNTU_SKU" not in os.environ:
     print("Missing required environment variable: UBUNTU_SKU")
     print("Valid options are: ")
     print("- server")
     print("- desktop")
+    exit(1)
 elif os.environ.get("UBUNTU_SKU").lower() == "server":
     sku = "live-server"
 elif os.environ.get("UBUNTU_SKU").lower() == "desktop":
     sku = "desktop"
 else:
-    print("¯\_(ツ)_/¯")
+    print("¯\\_(ツ)_/¯")
 
 # Get Ubuntu releases from Ubuntu API.
 # https://ubuntu.com/security/api/docs
