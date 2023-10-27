@@ -68,12 +68,12 @@ jobs:
 
       - name: Create JSON Object
         run: |
-          JSON="{\"debian\":\"debian-netinst-${VERSION}-latest.iso\"}"
+          export JSON="{\"debian\":\"debian-netinst-${VERSION}-latest.iso\"}"
 
       - name: Build Notification
         uses: zchryr/build-notifier-action@v1.0.11
         with:
-          body: $JSON
+          body: ${{ env.JSON }}
           url: ${{ secrets.WEBHOOK }}
           response_code: 201
           repo: ${{ github.repository }}
