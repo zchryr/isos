@@ -62,7 +62,7 @@ jobs:
       - name: Re-write SHA File
         working-directory: ./ubuntu
         run: |
-          python3 checksum.py
+          python3 checksum.py -sku ${{ matrix.job.sku }}
 
       - name: Verify SHA of ISO
         run: |
