@@ -68,7 +68,7 @@ jobs:
 
       - name: Create JSON Object
         run: |
-          export JSON="{\"debian\":\"debian-netinst-${VERSION}-latest.iso\"}"
+          echo JSON="{\"debian\":\"debian-netinst-${VERSION}-latest.iso\"}" >> $GITHUB_ENV
 
       - name: Build Notification
         uses: zchryr/build-notifier-action@v1.0.11
