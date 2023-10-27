@@ -63,6 +63,6 @@ jobs:
 
       - name: Latest Debian ISO -> NAS
         run: |
-          VERSION=$(ls | grep debian*iso | awk -F'[-.]' '{print $2"."$3"."$4}')
+          VERSION=$(ls | grep debian*iso | awk -F'[-.]' '{print $2}')
           mv *.iso "debian-netinst-$VERSION-latest.iso"
           sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no "debian-netinst-$VERSION-latest.iso" ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}"debian-netinst-$VERSION-latest.iso"
