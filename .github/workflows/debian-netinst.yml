@@ -3,7 +3,7 @@ name: 'Debian ISO'
 on:
   push:
     branches:
-      - main   
+      - main
 
 jobs:
   get-latest-download-url:
@@ -65,3 +65,18 @@ jobs:
           VERSION=$(ls | grep debian*iso | awk -F'[-.]' '{print $2}')
           mv *.iso "debian-netinst-$VERSION-latest.iso"
           sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no "debian-netinst-$VERSION-latest.iso" ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}"debian-netinst-$VERSION-latest.iso"
+
+      - name: Create JSON Object
+        run: |
+          JSON="{\"debian\":\"debian-netinst-${VERSION}-latest.iso\"}"
+
+      - name: Build Notification
+        uses: zchryr/build-notifier-action@v1.0.11
+        with:
+          body: $JSON
+          url: ${{ secrets.WEBHOOK }}
+          response_code: 201
+          repo: ${{ github.repository }}
+          workflow: $WORKFLOW
+        env:
+          WORKFLOW: ${{ github.workflow }}
