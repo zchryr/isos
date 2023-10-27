@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: # Manual trigger.
+  schedule:
+    - cron: '0 0 * * MON' # Every Monday.
 
 jobs:
   get-latest-download-url:
