@@ -38,7 +38,7 @@ jobs:
 
       - name: Echo Outputs
         run: |
-          echo ${{ needs.get-latest-download-url.outputs }}
+          echo ${{ toJson(needs.get-latest-download-url.outputs) }}
 
       # - name: Download Debian ISO
       #   run: |
