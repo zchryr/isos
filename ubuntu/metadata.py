@@ -38,8 +38,12 @@ else:
 
 # Get Ubuntu releases from Ubuntu API.
 # https://ubuntu.com/security/api/docs
-response = requests.get("https://ubuntu.com/security/releases.json")
-json_data = response.json()
+try:
+    response = requests.get("https://ubuntu.com/security/releases.json")
+    json_data = response.json()
+except Exception as e:
+    print("Error hitting Ubuntu releases API")
+    print("Exception occured: " + str(e))
 
 # Iterate over releases and save LTS versions to lists.
 for release in json_data["releases"]:
@@ -79,9 +83,14 @@ for lts in last_3_lts_releases:
                     + " - "
                     + release["codename"]
                 )
-                response = requests.head(
-                    url
-                )  # Send a HEAD request to get the status_code
+
+                try:
+                    response = requests.head(
+                        url
+                    )  # Send a HEAD request to get the status_code
+                except Exception as e:
+                    print("Error testing valid Ubuntu versions.")
+                    print("Exception: " + str(e))
 
                 if response.status_code == 200:
                     lts = release
@@ -98,6 +107,9 @@ for lts in last_3_lts_releases:
                     )
 
                     break  # Break out of the while loop if a valid link is found
+                elif response.status_code != 404:
+                    print("Something else happened")
+                    print("Status code: " + str(response.status_code))
 
                 minor_version += 1
                 if (
