@@ -36,6 +36,14 @@ jobs:
       - name: Clean Workspace
         uses: AutoModality/action-clean@v1.1.0
 
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4.1.0
+        with:
+          go-version: '1.21'
+
       - name: Download Debian ISO
         run: |
           wget ${{ needs.get-latest-download-url.outputs.url }}
