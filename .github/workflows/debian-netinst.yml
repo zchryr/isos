@@ -11,7 +11,7 @@ jobs:
     name: 'Get Latest Download URL'
     runs-on: ubuntu-latest
     outputs:
-      download_url: ${{ steps.get_url.outputs.download_url }}
+      url: ${{ steps.get_url.outputs.download_url }}
 
     steps:
       - name: Checkout code
@@ -27,10 +27,6 @@ jobs:
         working-directory: ./debian
         run: go run main.go
 
-      - name: Echo test
-        run: |
-          echo ${{ steps.get_url.outputs.download_url}}
-
   download-debian-iso:
     name: 'Download Latest Debian ISO'
     runs-on: self-hosted
@@ -40,28 +36,24 @@ jobs:
       - name: Clean Workspace
         uses: AutoModality/action-clean@v1.1.0
 
-      - name: Echo Outputs
+      - name: Download Debian ISO
         run: |
-          echo ${{ toJson(needs.get-latest-download-url.outputs) }}
+          wget ${{ needs.get-latest-download-url.outputs.url }}
 
-      # - name: Download Debian ISO
-      #   run: |
-      #     wget ${{ needs.get-latest-download-url.outputs.url }}
+      - name: Download Debian SHA256SUMS
+        run: |
+          wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/SHA256SUMS
 
-      # - name: Download Debian SHA256SUMS
-      #   run: |
-      #     wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/SHA256SUMS
+      - name: Re-write SHA File
+        run: |
+          go run sha.go $(ls | grep debian*iso)
 
-      # - name: Re-write SHA File
-      #   run: |
-      #     go run sha.go $(ls | grep debian*iso)
+      - name: Verify SHA of ISO
+        run: |
+          sha256sum -c SHA256SUMS
 
-      # - name: Verify SHA of ISO
-      #   run: |
-      #     sha256sum -c SHA256SUMS
-
-      # - name: Latest Debian ISO -> NAS
-      #   run: |
-      #     VERSION=$(ls | grep debian*iso | awk -F'[-.]' '{print $2"."$3"."$4}')
-      #     mv *.iso "debian-netinst-$VERSION-latest.iso"
-      #     sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no "debian-netinst-$VERSION-latest.iso" ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}"debian-netinst-$VERSION-latest.iso"
+      - name: Latest Debian ISO -> NAS
+        run: |
+          VERSION=$(ls | grep debian*iso | awk -F'[-.]' '{print $2"."$3"."$4}')
+          mv *.iso "debian-netinst-$VERSION-latest.iso"
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no "debian-netinst-$VERSION-latest.iso" ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}"debian-netinst-$VERSION-latest.iso"
