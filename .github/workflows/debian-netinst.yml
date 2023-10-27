@@ -37,7 +37,8 @@ jobs:
         uses: AutoModality/action-clean@v1.1.0
 
       - name: Echo Outputs
-        run: echo ${{ fromJson(needs.get-latest-download-url.outputs) }}
+        run: |
+          echo ${{ needs.get-latest-download-url.outputs }}
 
       # - name: Download Debian ISO
       #   run: |
