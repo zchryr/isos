@@ -22,7 +22,8 @@ sku = ""  # Type of Ubuntu to download. E.g., live-server || desktop.
 if os.environ.get("GITHUB_ACTION") != None:
     github_actions = True
 
-if os.environ.get("UBUNTU_SKU") == None:
+# if os.environ.get("UBUNTU_SKU") == None:
+if "UBUNTU_SKU" not in os.environ:
     print("Missing required environment variable: UBUNTU_SKU")
     print("Valid options are: ")
     print("- server")
