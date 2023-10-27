@@ -3,8 +3,7 @@ name: 'Debian ISO'
 on:
   push:
     branches:
-      - main
-      - 3-debian
+      - main   
 
 jobs:
   get-latest-download-url:
