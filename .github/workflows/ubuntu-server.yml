@@ -54,8 +54,12 @@ jobs:
 
       - name: Download Ubuntu Server SHA256SUMS
         run: |
-          RELEASE=${{ matrix.job.codename }}
-          wget "https://releases.ubuntu.com/$RELEASE/SHA256SUMS"
+          wget "https://releases.ubuntu.com/${{ matrix.job.codename }}/SHA256SUMS"
+
+      - name: Re-write SHA File
+        working-directory: ./ubuntu
+        run: |
+          python3 checksum.py
 
       - name: Verify SHA of ISO
         run: |
@@ -64,12 +68,13 @@ jobs:
 
       - name: Latest Ubuntu Server ISO -> NAS
         run: |
-          mv *.iso ubuntu-server-${{ matrix.job.version }}-latest.iso
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-server-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
+          mv *.iso ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
 
-      - name: Delete Local ISO
+      - name: Delete Files
         run: |
-          rm ubuntu-server-${{ matrix.job.version }}-latest.iso
+          rm ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
+          rm SHA256SUMS
 
       - name: Build Notification
         uses: zchryr/build-notifier-action@v1.0.11
