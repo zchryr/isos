@@ -25,7 +25,8 @@ jobs:
       - name: Run Go Program to Get Debian ISO URL
         id: get_url
         working-directory: ./debian
-        run: go run main.go
+        run: |
+          go run main.go
 
   download-debian-iso:
     name: 'Download Latest Debian ISO'
@@ -54,7 +55,7 @@ jobs:
 
       - name: Re-write SHA File
         run: |
-          go run sha.go $(ls | grep debian*iso)
+          go run ./debian/sha.go $(ls | grep debian*iso)
 
       - name: Verify SHA of ISO
         run: |
