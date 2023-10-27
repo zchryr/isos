@@ -43,6 +43,9 @@ jobs:
         job: ${{ fromJson(needs.get-ubuntu-isos.outputs.matrix) }}
 
     steps:
+      - name: Clone
+        uses: actions/checkout@v4
+
       - name: Clean Workspace
         uses: AutoModality/action-clean@v1.1.0
 
