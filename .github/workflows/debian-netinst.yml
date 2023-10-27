@@ -11,7 +11,7 @@ jobs:
     name: 'Get Latest Download URL'
     runs-on: ubuntu-latest
     outputs:
-      url: ${{ steps.get_url.download_url }}
+      download_url: ${{ steps.get_url.download_url }}
 
     steps:
       - name: Checkout code
@@ -26,6 +26,10 @@ jobs:
         id: get_url
         working-directory: ./debian
         run: go run main.go
+
+      - name: Echo test
+        run: |
+          echo ${{ steps.get_url.download_url}}
 
   download-debian-iso:
     name: 'Download Latest Debian ISO'
