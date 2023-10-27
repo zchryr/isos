@@ -52,7 +52,7 @@ func main() {
 	fmt.Println("Latest ISO download URL:", url)
 
 	// If within GitHub Actions context, set the output.
-	githubEnv := os.Getenv("GITHUB_ENV")
+	githubEnv := os.Getenv("GITHUB_OUTPUT")
 	if githubEnv != "" {
 		outputString := fmt.Sprintf("download_url=%s\n", url)
 		err := os.WriteFile(githubEnv, []byte(outputString), 0644)
