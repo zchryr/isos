@@ -49,7 +49,7 @@ jobs:
       - name: Download Ubuntu Server ISO
         run: |
           echo "Downloading latest: ${{ matrix.job.codename }}:${{ matrix.job.version }}"
-          wget -q ${{ matrix.job.download_url }}
+          wget ${{ matrix.job.download_url }}
 
       - name: Download Ubuntu Server SHA256SUMS
         run: |
