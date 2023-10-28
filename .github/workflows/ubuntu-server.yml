@@ -86,6 +86,3 @@ jobs:
           workflow: $WORKFLOW
         env:
           WORKFLOW: ${{ github.workflow }}
-
-      - name: Final Clean Workspace
-        uses: AutoModality/action-clean@v1.1.1
