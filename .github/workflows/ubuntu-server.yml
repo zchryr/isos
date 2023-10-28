@@ -68,11 +68,6 @@ jobs:
           mv *.iso ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
           sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
 
-      - name: Delete Files
-        run: |
-          rm ubuntu-${{ matrix.job.sku }}-${{ matrix.job.version }}-latest.iso
-          rm SHA256SUMS
-
       - name: Build Notification
         uses: zchryr/build-notifier-action@v1.0.11
         with:
