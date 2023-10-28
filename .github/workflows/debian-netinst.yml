@@ -84,4 +84,5 @@ jobs:
 
       - name: Clean Workspace
         if: always()
-        uses: AutoModality/action-clean@v1.1.1
+        run: |
+          rm -rf *
