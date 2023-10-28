@@ -43,9 +43,6 @@ jobs:
         job: ${{ fromJson(needs.get-ubuntu-isos.outputs.matrix) }}
 
     steps:
-      # - name: Clean Workspace
-      #   uses: AutoModality/action-clean@v1.1.1
-
       - name: Clone
         uses: actions/checkout@v4
 
@@ -86,3 +83,7 @@ jobs:
           workflow: $WORKFLOW
         env:
           WORKFLOW: ${{ github.workflow }}
+
+      - name: Clean Workspace
+        if: always()
+        uses: AutoModality/action-clean@v1.1.1
