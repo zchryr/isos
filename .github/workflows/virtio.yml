@@ -21,7 +21,7 @@ jobs:
 
       - name: Latest Virtio ISO -> NAS
         run: |
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no "virtio-win.iso" ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}"virtio-win.iso"
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no "virtio-win.iso" ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}"virtio-win-latest.iso"
 
       - name: Create JSON Object
         run: |
