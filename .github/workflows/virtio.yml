@@ -1,0 +1,44 @@
+name: 'Virtio'
+
+on:
+  push:
+    branches:
+      - main
+      - 7-virtio
+  workflow_dispatch: # Manual trigger.
+  schedule:
+    - cron: '0 0 * * MON' # Every Monday.
+
+jobs:
+  download-virtio-iso:
+    name: 'Download Latest Virtio ISO'
+    runs-on: self-hosted
+
+    steps:
+      - name: Download Virtio ISO
+        run: |
+          wget "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.240-1/virtio-win.iso"
+
+      - name: Latest Virtio ISO -> NAS
+        run: |
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no "virtio-win.iso" ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}"virtio-win-latest.iso"
+
+      - name: Create JSON Object
+        run: |
+          echo JSON="{\"virtio\":\"true\"}" >> $GITHUB_ENV
+
+      - name: Build Notification
+        uses: zchryr/build-notifier-action@v1.0.11
+        with:
+          body: ${{ env.JSON }}
+          url: ${{ secrets.WEBHOOK }}
+          response_code: 201
+          repo: ${{ github.repository }}
+          workflow: $WORKFLOW
+        env:
+          WORKFLOW: ${{ github.workflow }}
+
+      - name: Clean Workspace
+        if: always()
+        run: |
+          rm -rf *
