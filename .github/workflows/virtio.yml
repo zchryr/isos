@@ -1,4 +1,4 @@
-name: 'Virtio'
+name: 'Virtio ISO'
 
 on:
   push:
