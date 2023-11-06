@@ -48,7 +48,7 @@ jobs:
 
       - name: Download Rocky Linux SHA256SUMS
         run: |
-          wget "${{ matrix.job.download_url }}.CHECKSUM"
+          wget -O SHA256SUMS "${{ matrix.job.download_url }}.CHECKSUM"
 
       - name: Verify SHA of ISO
         run: |
