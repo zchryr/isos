@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - 4-rocky-linux
   workflow_dispatch: # Manual trigger.
   schedule:
     - cron: '0 0 * * MON' # Every Monday.
