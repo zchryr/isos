@@ -56,7 +56,7 @@ matrix = [
             "Rocky-{}-x86_64-boot.iso".format(get_latest_version())
         ),
         "version": get_latest_version(),
-        "major_verison": get_latest_version().split(".")[0],
+        "major_version": get_latest_version().split(".")[0],
     },
     {
         "name": "minimal",
@@ -64,7 +64,7 @@ matrix = [
             "Rocky-{}-x86_64-minimal.iso".format(get_latest_version())
         ),
         "version": get_latest_version(),
-        "major_verison": get_latest_version().split(".")[0],
+        "major_version": get_latest_version().split(".")[0],
     },
 ]
 
