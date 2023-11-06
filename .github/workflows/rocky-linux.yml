@@ -1,0 +1,75 @@
+name: 'Rocky Linux ISOs'
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Manual trigger.
+  schedule:
+    - cron: '0 0 * * MON' # Every Monday.
+
+jobs:
+  get-rocky-linux-isos:
+    name: 'Generate Matrix Rocky Linux ISOs'
+    runs-on: ubuntu-latest
+    container:
+      image: python:latest
+    outputs:
+      matrix: ${{ steps.iso.outputs.matrix }}
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v4
+
+      - name: Generate Matrix
+        id: iso
+        working-directory: ./rocky-linux
+        run: |
+          pip3 install -q -r requirements.txt
+          python3 metadata.py
+
+  download-rocky-linux-isos:
+    name: 'Download ${{ matrix.job.name }} - ${{ matrix.job.version }}'
+    runs-on: self-hosted
+    needs: get-rocky-linux-isos
+    strategy:
+      matrix:
+        job: ${{ fromJson(needs.get-rocky-linux-isos.outputs.matrix) }}
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v4
+
+      - name: Download Rocky Linux ISO
+        run: |
+          echo "Downloading latest: ${{ matrix.job.name }} - ${{ matrix.job.version }}"
+          wget ${{ matrix.job.download_url }}
+
+      - name: Download Rocky Linux SHA256SUMS
+        run: |
+          wget -O SHA256SUMS "${{ matrix.job.download_url }}.CHECKSUM"
+
+      - name: Verify SHA of ISO
+        run: |
+          sha256sum -c SHA256SUMS
+
+      - name: Latest Rocky Linux ISO -> NAS
+        run: |
+          mv *.iso rocky-linux-${{ matrix.job.name }}-${{ matrix.job.major_version }}-latest.iso
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./rocky-linux-${{ matrix.job.name }}-${{ matrix.job.major_version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}rocky-linux-${{ matrix.job.name }}-${{ matrix.job.major_version }}-latest.iso
+
+      - name: Build Notification
+        uses: zchryr/build-notifier-action@v1.0.11
+        with:
+          body: ${{ toJson(matrix.job) }}
+          url: ${{ secrets.WEBHOOK }}
+          response_code: 201
+          repo: ${{ github.repository }}
+          workflow: $WORKFLOW
+        env:
+          WORKFLOW: ${{ github.workflow }}
+
+      - name: Clean Workspace
+        if: always()
+        run: |
+          rm -rf *
