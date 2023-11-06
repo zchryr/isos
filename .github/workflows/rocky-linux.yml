@@ -56,8 +56,8 @@ jobs:
 
       - name: Latest Rocky Linux ISO -> NAS
         run: |
-          mv *.iso rocky-linux-${{ matrix.job.name }}-latest.iso
-          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./rocky-linux-${{ matrix.job.name }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}rocky-linux-${{ matrix.job.name }}-latest.iso
+          mv *.iso rocky-linux-${{ matrix.job.name }}-${{ matrix.job.major_version }}-latest.iso
+          sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./rocky-linux-${{ matrix.job.name }}-${{ matrix.job.major_version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}rocky-linux-${{ matrix.job.name }}-${{ matrix.job.major_version }}-latest.iso
 
       - name: Build Notification
         uses: zchryr/build-notifier-action@v1.0.11
