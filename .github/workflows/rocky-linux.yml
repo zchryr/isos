@@ -35,7 +35,7 @@ jobs:
     needs: get-rocky-linux-isos
     strategy:
       matrix:
-        job: ${{ fromJson(needs.get-ubuntu-isos.outputs.matrix) }}
+        job: ${{ fromJson(needs.get-rocky-linux-isos.outputs.matrix) }}
 
     steps:
       - name: Clone
