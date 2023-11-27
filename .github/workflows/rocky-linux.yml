@@ -59,15 +59,11 @@ jobs:
           sshpass -p "${{ secrets.NAS_PASSWORD }}" scp -o StrictHostKeyChecking=no ./rocky-linux-${{ matrix.job.name }}-${{ matrix.job.major_version }}-latest.iso ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_IP}}:${{ secrets.NAS_ISO_PATH }}rocky-linux-${{ matrix.job.name }}-${{ matrix.job.major_version }}-latest.iso
 
       - name: Build Notification
-        uses: zchryr/build-notifier-action@v1.0.11
+        uses: zchryr/notifier@main
         with:
-          body: ${{ toJson(matrix.job) }}
-          url: ${{ secrets.WEBHOOK }}
-          response_code: 201
-          repo: ${{ github.repository }}
-          workflow: $WORKFLOW
-        env:
-          WORKFLOW: ${{ github.workflow }}
+          input: ${{ toJson(matrix.job) }}
+          url: '${{ secrets.WEBHOOK }}'
+          response_code: '201'
 
       - name: Clean Workspace
         if: always()

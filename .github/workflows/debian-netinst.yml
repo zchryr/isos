@@ -72,15 +72,11 @@ jobs:
           echo JSON="{\"debian\":\"debian-netinst-${VERSION}-latest.iso\"}" >> $GITHUB_ENV
 
       - name: Build Notification
-        uses: zchryr/build-notifier-action@v1.0.11
+        uses: zchryr/notifier@main
         with:
-          body: ${{ env.JSON }}
-          url: ${{ secrets.WEBHOOK }}
-          response_code: 201
-          repo: ${{ github.repository }}
-          workflow: $WORKFLOW
-        env:
-          WORKFLOW: ${{ github.workflow }}
+          input: ${{ env.JSON }}
+          url: '${{ secrets.WEBHOOK }}'
+          response_code: '201'
 
       - name: Clean Workspace
         if: always()
