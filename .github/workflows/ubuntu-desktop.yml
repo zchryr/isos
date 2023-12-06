@@ -12,8 +12,6 @@ jobs:
   get-ubuntu-isos:
     name: 'Generate Matrix Ubuntu ISOs'
     runs-on: ubuntu-latest
-    container:
-      image: python:latest
     outputs:
       matrix: ${{ steps.iso.outputs.matrix }}
 
@@ -21,9 +19,9 @@ jobs:
       - name: Clone
         uses: actions/checkout@v4
 
-      - name: Upgrade Pip
-        run: |
-          pip3 install --upgrade pip
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
       - name: Generate Matrix
         id: iso
