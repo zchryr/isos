@@ -28,6 +28,7 @@ jobs:
         id: get_url
         working-directory: ./debian
         run: |
+          pip3 install -q -r requirements.txt
           python3 metadata.py
 
   download-debian-iso:
