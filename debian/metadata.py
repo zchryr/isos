@@ -38,6 +38,6 @@ if os.getenv("CI") == "true":
     # Append the 'debian_download_url' to the 'GITHUB_ENV' file
     env_file = os.getenv("GITHUB_ENV")
     with open(env_file, "a") as myfile:
-        myfile.write(f"url={debian_download_url}\n")
+        myfile.write(f"download_url={debian_download_url}\n")
 else:
     print(debian_download_url)
