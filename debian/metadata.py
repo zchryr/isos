@@ -34,7 +34,7 @@ debian_version = get_debian_stable_version()
 debian_download_url = format_url(debian_version)
 
 # Check if running in GitHub Actions (CI environment variable set)
-if os.getenv("CI") == "true":
+if os.getenv("GITHUB_ACTIONS") == "true":
     # Append the 'debian_download_url' to the 'GITHUB_ENV' file
     env_file = os.getenv("GITHUB_ENV")
     with open(env_file, "a") as myfile:
