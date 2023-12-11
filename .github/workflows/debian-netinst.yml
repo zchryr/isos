@@ -31,14 +31,6 @@ jobs:
           pip3 install -q -r requirements.txt
           python3 metadata.py
 
-      - name: print env vars
-        run: |
-          printenv
-
-      - name: echo outputs
-        run: |
-          echo "${{ toJson(steps.get_url.outputs) }}"
-
   download-debian-iso:
     name: 'Download Latest Debian ISO'
     runs-on: self-hosted
