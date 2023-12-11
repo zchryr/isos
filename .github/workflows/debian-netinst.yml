@@ -31,6 +31,10 @@ jobs:
           pip3 install -q -r requirements.txt
           python3 metadata.py
 
+      - name: print env vars
+        run: |
+          printenv
+
       - name: echo output
         run: |
           echo "${{ steps.get_url.outputs.download_url }}"
@@ -44,6 +48,7 @@ jobs:
       - name: echo
         run: |
           echo "${{ needs.get-latest-download-url.outputs.url }}"
+
       # - name: Checkout code
       #   uses: actions/checkout@v4
 
