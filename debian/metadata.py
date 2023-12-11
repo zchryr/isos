@@ -38,9 +38,5 @@ if os.getenv("GITHUB_ACTIONS") == "true":
     # Append the 'debian_download_url' to the 'GITHUB_ENV' file
     with open(os.environ["GITHUB_OUTPUT"], "a") as f:
         print("{0}={1}".format("download_url", debian_download_url), file=f)
-
-    # env_file = os.getenv("GITHUB_ENV")
-    # with open(env_file, "a") as myfile:
-    #     myfile.write(f"download_url={debian_download_url}\n")
 else:
     print(debian_download_url)
