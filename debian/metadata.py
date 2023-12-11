@@ -35,11 +35,12 @@ debian_download_url = format_url(debian_version)
 
 # Check if running in GitHub Actions (CI environment variable set)
 if os.getenv("GITHUB_ACTIONS") == "true":
-    print("GH Actions")
-
     # Append the 'debian_download_url' to the 'GITHUB_ENV' file
-    env_file = os.getenv("GITHUB_ENV")
-    with open(env_file, "a") as myfile:
-        myfile.write(f"download_url={debian_download_url}\n")
+    with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+        print("{0}={1}".format("download_url", debian_download_url), file=f)
+
+    # env_file = os.getenv("GITHUB_ENV")
+    # with open(env_file, "a") as myfile:
+    #     myfile.write(f"download_url={debian_download_url}\n")
 else:
     print(debian_download_url)
