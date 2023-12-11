@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - 15-refactor-debian
   workflow_dispatch: # Manual trigger.
   schedule:
     - cron: '0 0 * * MON' # Every Monday.
@@ -19,16 +20,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v4.1.0
+      - uses: actions/setup-python@v4
         with:
-          go-version: '1.21'
+          python-version: '3.11'
 
-      - name: Run Go Program to Get Debian ISO URL
+      - name: Run Python Program to Get Debian ISO URL
         id: get_url
         working-directory: ./debian
         run: |
-          go run main.go
+          python3 metadata.py
 
   download-debian-iso:
     name: 'Download Latest Debian ISO'
@@ -39,10 +39,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v4.1.0
+      - uses: actions/setup-python@v4
         with:
-          go-version: '1.21'
+          python-version: '3.11'
 
       - name: Download Debian ISO
         run: |
@@ -54,7 +53,7 @@ jobs:
 
       - name: Re-write SHA File
         run: |
-          go run ./debian/sha.go $(ls | grep debian*iso)
+          python3 ./debian/sha.py $(ls | grep debian*iso)
 
       - name: Verify SHA of ISO
         run: |
