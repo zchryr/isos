@@ -35,9 +35,9 @@ jobs:
         run: |
           printenv
 
-      - name: echo output
+      - name: echo outputs
         run: |
-          echo "${{ steps.get_url.outputs.download_url }}"
+          echo "${{ toJson(steps.get_url.outputs) }}"
 
   download-debian-iso:
     name: 'Download Latest Debian ISO'
